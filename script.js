@@ -49,9 +49,6 @@ function victoryImg () {
 
 
 
-
-
-
 // FONTIONS
 
 function pileFace(min, max)
@@ -99,63 +96,57 @@ function combat(){
         logs.innerHTML +=  "Pile ! Ken commence."
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
-        while(ken.hp > 0 || sakura.hp > 0){
+        while(ken.hp > 0 && sakura.hp > 0){
+            setTimeout(atkKen, 1000);
+            setTimeout(atkSakura, 1000);
+        }
 
-            if(ken.hp <= 0){
-                img.src = 'img/sakura_victory.gif';
-                victoryImg();
-                fighters.innerHTML += "<h1>Sakura WIN</h1>"
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                logs.innerHTML +=  "Ken est mort."
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                break;
-            }else{
-                atkKen();
-            }
-    
-            if(sakura.hp <= 0){
-                img.src = 'img/ken_victory.gif';
-                victoryImg();
-                fighters.innerHTML += "<h1>Ken WIN</h1>"
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                logs.innerHTML +=  "Sakura est morte."
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                break;
-            }else{
-                atkSakura();
-            }
+        if(ken.hp <= 0){
+            img.src = 'img/sakura_victory.gif';
+            victoryImg();
+            fighters.innerHTML += "<h1>Sakura WIN</h1>"
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            logs.innerHTML +=  "Ken est mort."
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+        }
+
+        if(sakura.hp <= 0){
+            img.src = 'img/ken_victory.gif';
+            victoryImg();
+            fighters.innerHTML += "<h1>Ken WIN</h1>"
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            logs.innerHTML +=  "Sakura est morte."
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+     
         }
 
         
-    }else{
+    }else{ // Sakura commence
         logs.innerHTML +=  "Face ! Sakura commence."
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
-        while(ken.hp > 0 || sakura.hp > 0){
+        while(ken.hp > 0 && sakura.hp > 0){
     
-            if(sakura.hp <= 0){
-                img.src = 'img/ken_victory.gif';
-                victoryImg();
-                fighters.innerHTML += "<h1>Ken WIN</h1>"
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                logs.innerHTML +=  "Sakura est morte."
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                break;
-            }else{
-                atkSakura();
-            }
+            setTimeout(atkSakura, 1000);
+            setTimeout(atkKen, 1000);
+        }
 
-            if(ken.hp <= 0){
-                img.src = 'img/sakura_victory.gif';
-                victoryImg();
-                fighters.innerHTML += "<h1>Sakura WIN</h1>"
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                logs.innerHTML +=  "Ken est mort."
-                logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-                break;
-            }else{
-                atkKen();
-            }
+        if(sakura.hp <= 0){
+            img.src = 'img/ken_victory.gif';
+            victoryImg();
+            fighters.innerHTML += "<h1>Ken WIN</h1>"
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            logs.innerHTML +=  "Sakura est morte."
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+        }
+
+        if(ken.hp <= 0){
+            img.src = 'img/sakura_victory.gif';
+            victoryImg();
+            fighters.innerHTML += "<h1>Sakura WIN</h1>"
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            logs.innerHTML +=  "Ken est mort."
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
         }
     }
 
