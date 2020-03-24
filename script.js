@@ -96,7 +96,7 @@ var sakura = {
         victoryImg();
         fighters.innerHTML += "<h1>"+this.name+" WIN</h1>"
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-        logs.innerHTML +=  isFacing + "est mort."
+        logs.innerHTML +=  isFacing + " est mort."
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
     }
 }
@@ -156,55 +156,55 @@ function combat(){
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
 
-        function log(){
-            
-        }
+        var refreshIntervalId = setInterval(log, 2000);;
 
-        while(ken.hp > 0 && sakura.hp > 0){
+        function log(){
             if (ken.hp > 0){
                 ken.atk();
             }
             if (sakura.hp > 0){
                 sakura.atk();
             }
-        }
 
-        if(ken.hp <= 0){
-            sakura.victory();
-        }
+            if(ken.hp <= 0){
+                sakura.victory();
+                clearInterval(refreshIntervalId);
+            }
 
-        if(sakura.hp <= 0){
-            ken.victory();
+            if(sakura.hp <= 0){
+                ken.victory();
+                clearInterval(refreshIntervalId);
+            }
         }
-
-        
-    }else{ // Sakura commence
+    }
+    else{ // Sakura commence
         isFacing = "ken";
         logs.innerHTML +=  "<br>-------------------------<br><br>"
         logs.innerHTML +=  "Face ! Sakura commence."
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
-        while(sakura.hp > 0 && ken.hp > 0){
-            
+
+        var refreshIntervalId = setInterval(log, 2000);;
+
+        function log(){
             if (sakura.hp > 0){
                 sakura.atk();
             }
             if (ken.hp > 0){
                 ken.atk();
             }
-            
-        }
 
-        if(sakura.hp <= 0){
-            ken.victory();
-        }
-
-        if(ken.hp <= 0){
-            sakura.victory();
+            if(sakura.hp <= 0){
+                ken.victory();
+                clearInterval(refreshIntervalId);
+            }
+    
+            if(ken.hp <= 0){
+                sakura.victory();
+                clearInterval(refreshIntervalId);
+            }
         }
     }
-
-    
 }
 
 
