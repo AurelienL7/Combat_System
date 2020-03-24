@@ -35,6 +35,9 @@
  * Ajout de personnages
  * Système d'attaque / défense
  * Tour par tour
+ * scroll automatique
+ * desactiver le bouton fight pendant le combat
+ * Ajouter une barre de HP
  */
 
 
@@ -43,63 +46,48 @@
 // OBJETS
 //////////////////
 
+var dmgClassName = "dmg";
 
-var ken = {
-    name: "Ken",
-    hp: 100,
-    atk: function(){
-        isFacing = "sakura";
-        // Ken attaque
-        var dmgClassName = "dmg";
-        atkResult = atk(1,20);
-        img.src = 'img/ken_profile.png';
-        if(atkResult === 20){
-            logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>"+this.name+"</strong> attaque <strong>Sakura</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats" + " - COUP CRITIQUE" + "<br>";
-        }else{
-            logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>"+this.name+"</strong> attaque <strong>Sakura</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
+function playerFactory(name, profileImg, victoryImg) {
+    return {
+        name: name,
+
+        hp: 100,
+
+        profileImg: profileImg, // l'image du combattant
+
+        victoryImg: victoryImg,
+
+        attack(target) {// Le personnage attaque
+            atkResult = atk(1,20); // Puissance d'attaque
+            target.hp -= atkResult; // Enleve la puissance atk aux hp adverse
+            if(atkResult === 20){ // Affichage des logs & coups critiques
+                logs.innerHTML +=  '<img src="'+profileImg+'" />' + " <strong>"+this.name+"</strong> attaque <strong>"+target.name+"</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats" + " - COUP CRITIQUE" + "<br>";
+            }else{
+                logs.innerHTML +=  '<img src="'+ profileImg+'" />' + " <strong>"+this.name+"</strong> attaque <strong>"+target.name+"</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
+            }
+            logs.innerHTML +=  target.name + " a " + target.hp + " HP <br><br>"
+        },
+
+        victory(target){
+            // Affiche l'image de victoire
+            fighters.innerHTML = '<img src="'+victoryImg+'" />'; 
+            fighters.style = "flex-direction:column-reverse;"; 
+            fighters.innerHTML += "<h1>"+this.name+ " WIN</h1>"
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            logs.innerHTML +=  target.name + " est K.O."
+            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
         }
-
-        sakura.hp = sakura.hp - atkResult;
-        logs.innerHTML +=  "Sakura a " + sakura.hp + " HP <br><br>"
-    },
-
-    victory: function(){
-        img.src = 'img/ken_victory.gif';
-        victoryImg();
-        fighters.innerHTML += "<h1>"+this.name+ "WIN</h1>"
-        logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-        logs.innerHTML +=  isFacing + " est morte."
-        logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-    }
+    };
 }
 
-var sakura = {
-    name: "Sakura",
-    hp : 100,
-    atk : function(){
-        isFacing = "ken";
-        // Sakura attaque
-        var dmgClassName = "dmg";
-        atkResult = atk(1,20);
-        img.src = 'img/sakura_profile.png';
-        if (atkResult === 20){
-            logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>"+this.name+"</strong> attaque <strong>"+isFacing+"</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats" + " - COUP CRITIQUE" + "<br>";
-        }else{
-            logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>"+this.name+"</strong> attaque <strong>"+isFacing+"</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
-        }
-        ken.hp = ken.hp - atkResult;
-        logs.innerHTML +=  "Ken a " + ken.hp + " HP <br><br>"
-    },
 
-    victory: function(){
-        img.src = 'img/sakura_victory.gif';
-        victoryImg();
-        fighters.innerHTML += "<h1>"+this.name+" WIN</h1>"
-        logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-        logs.innerHTML +=  isFacing + " est mort."
-        logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-    }
-}
+var ken = playerFactory("Ken", "img/ken_profile.png", "img/ken_victory.gif");
+var sakura = playerFactory("Sakura", "img/sakura_profile.png", "img/sakura_victory.gif");
+var akuma = playerFactory("Akuma", "img/akuma_profile.png", "img/akuma_victory.gif");
+
+
+
 
 
 //////////////////
@@ -107,6 +95,7 @@ var sakura = {
 //////////////////
 
 var btn = document.getElementsByClassName('button')[0];
+var btnContainer = document.getElementsByClassName('button-container')[0];
 var logs = document.getElementsByClassName('logs')[0];
 var fighters = document.getElementsByClassName('fighters')[0];
 var img = new Image();
@@ -130,82 +119,68 @@ function atk(min, max)
  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Affiche l'image de victoire
-function victoryImg () {
-    fighters.innerHTML = '<img src="'+img.src+'" />'; 
-    fighters.style = "flex-direction:column-reverse;"; 
-  };
 
 
-// Lance le combat au clic du bouton
-function combat(){
+function combat(fighter1, fighter2){
+
+    // Désactivation du bouton de combat
+
+    btnContainer.style = "display:none;"
+
+    // Mettre une fonction pour déterminer quels persos sont sélectionnés
+
+    fighter1 = ken;
+    fighter2 = sakura;
 
     // Reset du combat au clic du bouton
-    ken.hp = 100;
-    sakura.hp = 100;
-    var atkResult;
+    fighter1.hp = 100;
+    fighter2.hp = 100;
     logs.innerHTML =  "";
 
-
     var initCombat = pileFace(0,1); // Pile ou face pour savoir qui commence
-    
-    
-    if(initCombat === 0){ // Ken Commence
+
+    if(initCombat === 0){
         logs.innerHTML +=  "<br>-------------------------<br><br>"
-        logs.innerHTML +=  "Pile ! Ken commence."
+        logs.innerHTML +=  "Pile ! "+ fighter1.name +" commence."
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-
-
-        var refreshIntervalId = setInterval(log, 2000);;
-
-        function log(){
-            if (ken.hp > 0){
-                ken.atk();
-            }
-            if (sakura.hp > 0){
-                sakura.atk();
-            }
-
-            if(ken.hp <= 0){
-                sakura.victory();
-                clearInterval(refreshIntervalId);
-            }
-
-            if(sakura.hp <= 0){
-                ken.victory();
-                clearInterval(refreshIntervalId);
-            }
-        }
+    }else{
+        logs.innerHTML +=  "<br>-------------------------<br><br>"
+        logs.innerHTML +=  "Face ! "+ fighter2.name +" commence."
+        logs.innerHTML +=  "<br><br>-------------------------<br><br>"
     }
-    else{ // Sakura commence
-        isFacing = "ken";
-        logs.innerHTML +=  "<br>-------------------------<br><br>"
-        logs.innerHTML +=  "Face ! Sakura commence."
-        logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
+    var refreshIntervalId = setInterval(log, 1000);
 
-        var refreshIntervalId = setInterval(log, 2000);;
+    function log(){
+        
 
-        function log(){
-            if (sakura.hp > 0){
-                sakura.atk();
-            }
-            if (ken.hp > 0){
-                ken.atk();
-            }
-
-            if(sakura.hp <= 0){
-                ken.victory();
+        if (fighter1.hp > 0 && fighter2 && initCombat === 0){
+            fighter1.attack(fighter2);
+            fighter2.attack(fighter1);
+            if(fighter1.hp <= 0){
+                fighter2.victory(fighter1);
                 clearInterval(refreshIntervalId);
             }
     
-            if(ken.hp <= 0){
-                sakura.victory();
+            if(fighter2.hp <= 0){
+                fighter1.victory(fighter2);
+                clearInterval(refreshIntervalId);
+            }
+        }else{
+            fighter2.attack(fighter1);
+            fighter1.attack(fighter2);
+            if(fighter1.hp <= 0){
+                fighter2.victory(fighter1);
+                clearInterval(refreshIntervalId);
+            }
+            if(fighter2.hp <= 0){
+                fighter1.victory(fighter2);
                 clearInterval(refreshIntervalId);
             }
         }
     }
 }
+
 
 
 //////////////////
