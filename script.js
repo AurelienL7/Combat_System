@@ -61,6 +61,8 @@ function playerFactory(name, profileImg, victoryImg) {
         attack(target) {// Le personnage attaque
             atkResult = atk(1,20); // Puissance d'attaque
             target.hp -= atkResult; // Enleve la puissance atk aux hp adverse
+            currentHealth = this.hp
+            hpBarProgress(currentHealth);
             if(atkResult === 20){ // Affichage des logs & coups critiques
                 logs.innerHTML +=  '<img src="'+profileImg+'" />' + " <strong>"+this.name+"</strong> attaque <strong>"+target.name+"</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats" + " - COUP CRITIQUE" + "<br>";
             }else{
@@ -119,9 +121,20 @@ function atk(min, max)
  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Barres de points de vie
+function hpBarProgress(currentHealth) {
+    var elem = document.getElementsByClassName("hp-bar-left-progress")[0]; 
 
+    elem.style.width = currentHealth +'%';
 
-function combat(fighter1, fighter2){
+    if(currentHealth <= 0){
+        console.log("coucou")
+        elem.style.width = '0%'; 
+    } 
+}
+
+function combat(){
+
 
     // Désactivation du bouton de combat
 
@@ -136,6 +149,8 @@ function combat(fighter1, fighter2){
     fighter1.hp = 100;
     fighter2.hp = 100;
     logs.innerHTML =  "";
+
+    
 
     var initCombat = pileFace(0,1); // Pile ou face pour savoir qui commence
 
@@ -153,7 +168,6 @@ function combat(fighter1, fighter2){
 
     function log(){
         
-
         if (fighter1.hp > 0 && fighter2 && initCombat === 0){
             fighter1.attack(fighter2);
             fighter2.attack(fighter1);
