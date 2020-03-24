@@ -114,8 +114,12 @@ function combat(){
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
         while(ken.hp > 0 && sakura.hp > 0){
-            atkKen();
-            atkSakura();
+            if (ken.hp > 0){
+                atkKen();
+            }
+            if (sakura.hp > 0){
+                atkSakura();
+            }
         }
 
         if(ken.hp <= 0){
@@ -131,9 +135,15 @@ function combat(){
         logs.innerHTML +=  "Face ! Sakura commence."
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
-        while(ken.hp > 0 && sakura.hp > 0){
-            atkSakura();
-            atkKen();
+        while(sakura.hp > 0 && ken.hp > 0){
+            
+            if (sakura.hp > 0){
+                atkSakura();
+            }
+            if (ken.hp > 0){
+                atkKen();
+            }
+            
         }
 
         if(sakura.hp <= 0){
