@@ -20,6 +20,8 @@
 
 // OBJETS
 
+
+
 var ken = {
     name: "Ken",
     hp: 100,
@@ -37,7 +39,6 @@ var sakura = {
 var btn = document.getElementsByClassName('button')[0];
 var logs = document.getElementsByClassName('logs')[0];
 var fighters = document.getElementsByClassName('fighters')[0];
-
 //
 var img = new Image();
  
@@ -80,7 +81,23 @@ function atkSakura(){
     logs.innerHTML +=  "Ken a " + ken.hp + " HP <br><br>"
 }
 
+function kenVictory(){
+    img.src = 'img/ken_victory.gif';
+    victoryImg();
+    fighters.innerHTML += "<h1>Ken WIN</h1>"
+    logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+    logs.innerHTML +=  "Sakura est morte."
+    logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+}
 
+function sakuraVictory(){
+    img.src = 'img/sakura_victory.gif';
+    victoryImg();
+    fighters.innerHTML += "<h1>Sakura WIN</h1>"
+    logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+    logs.innerHTML +=  "Ken est mort."
+    logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+}
 
 function combat(){
     ken.hp = 100;
@@ -97,27 +114,16 @@ function combat(){
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
         while(ken.hp > 0 && sakura.hp > 0){
-            setTimeout(atkKen, 1000);
-            setTimeout(atkSakura, 1000);
+            atkKen();
+            atkSakura();
         }
 
         if(ken.hp <= 0){
-            img.src = 'img/sakura_victory.gif';
-            victoryImg();
-            fighters.innerHTML += "<h1>Sakura WIN</h1>"
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-            logs.innerHTML +=  "Ken est mort."
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            sakuraVictory();
         }
 
         if(sakura.hp <= 0){
-            img.src = 'img/ken_victory.gif';
-            victoryImg();
-            fighters.innerHTML += "<h1>Ken WIN</h1>"
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-            logs.innerHTML +=  "Sakura est morte."
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-     
+            kenVictory();
         }
 
         
@@ -126,27 +132,16 @@ function combat(){
         logs.innerHTML +=  "<br><br>-------------------------<br><br>"
 
         while(ken.hp > 0 && sakura.hp > 0){
-    
-            setTimeout(atkSakura, 1000);
-            setTimeout(atkKen, 1000);
+            atkSakura();
+            atkKen();
         }
 
         if(sakura.hp <= 0){
-            img.src = 'img/ken_victory.gif';
-            victoryImg();
-            fighters.innerHTML += "<h1>Ken WIN</h1>"
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-            logs.innerHTML +=  "Sakura est morte."
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            kenVictory();
         }
 
         if(ken.hp <= 0){
-            img.src = 'img/sakura_victory.gif';
-            victoryImg();
-            fighters.innerHTML += "<h1>Sakura WIN</h1>"
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
-            logs.innerHTML +=  "Ken est mort."
-            logs.innerHTML +=  "<br><br>-------------------------<br><br>"
+            sakuraVictory();
         }
     }
 
