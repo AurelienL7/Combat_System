@@ -94,3 +94,8 @@ body, html{
     margin: 0 auto;
     padding: 20px;
 }
+
+.dmg{
+    color: red;
+    font-weight: bold;
+}

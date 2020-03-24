@@ -18,9 +18,24 @@
  */
 
 
+
+/**
+ * ---------------------
+ * TO DO
+ * ---------------------
+ * 
+ * Afficher les coups critiques
+ * Afficher les attaques dans la div fighters
+ * Ralentir l'affichage des logs
+ * Styliser le texte des logs
+ * Bouton reset
+ * Dans les logs, afficher l'attaquant à gauche et le défenseur à droite
+ */
+
+
+
+
 // OBJETS
-
-
 
 var ken = {
     name: "Ken",
@@ -39,14 +54,9 @@ var sakura = {
 var btn = document.getElementsByClassName('button')[0];
 var logs = document.getElementsByClassName('logs')[0];
 var fighters = document.getElementsByClassName('fighters')[0];
-//
+
 var img = new Image();
- 
-function victoryImg () {
-  fighters.innerHTML = '<img src="'+img.src+'" />'; 
-  fighters.style = "flex-direction:column-reverse;"; 
-};
- 
+
 
 
 
@@ -62,21 +72,27 @@ function atk(min, max)
  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function victoryImg () {
+    fighters.innerHTML = '<img src="'+img.src+'" />'; 
+    fighters.style = "flex-direction:column-reverse;"; 
+  };
 
 function atkKen(){
     // Ken attaque
+    var dmgClassName = "dmg";
     atkResult = atk(1,20);
     img.src = 'img/ken_profile.png';
-    logs.innerHTML +=  '<img src="'+img.src+'" />' + " Ken attaque Sakura et inflige " + atkResult + " dégats <br>";
+    logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Ken</strong> attaque <strong>Sakura</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
     sakura.hp = sakura.hp - atkResult;
     logs.innerHTML +=  "Sakura a " + sakura.hp + " HP <br><br>"
 }
 
 function atkSakura(){
     // Sakura attaque
+    var dmgClassName = "dmg";
     atkResult = atk(1,20);
     img.src = 'img/sakura_profile.png';
-    logs.innerHTML +=  '<img src="'+img.src+'" />' + " Sakura attaque Ken et inflige " + atkResult + " dégats <br>";
+    logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Sakura</strong> attaque <strong>Ken</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
     ken.hp = ken.hp - atkResult;
     logs.innerHTML +=  "Ken a " + ken.hp + " HP <br><br>"
 }
