@@ -82,7 +82,12 @@ function atkKen(){
     var dmgClassName = "dmg";
     atkResult = atk(1,20);
     img.src = 'img/ken_profile.png';
-    logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Ken</strong> attaque <strong>Sakura</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
+    if(atkResult === 20){
+        logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Ken</strong> attaque <strong>Sakura</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats" + " - COUP CRITIQUE" + "<br>";
+    }else{
+        logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Ken</strong> attaque <strong>Sakura</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
+    }
+    
     sakura.hp = sakura.hp - atkResult;
     logs.innerHTML +=  "Sakura a " + sakura.hp + " HP <br><br>"
 }
@@ -92,7 +97,11 @@ function atkSakura(){
     var dmgClassName = "dmg";
     atkResult = atk(1,20);
     img.src = 'img/sakura_profile.png';
-    logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Sakura</strong> attaque <strong>Ken</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
+    if (atkResult === 20){
+        logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Sakura</strong> attaque <strong>Ken</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats" + " - COUP CRITIQUE" + "<br>";
+    }else{
+        logs.innerHTML +=  '<img src="'+img.src+'" />' + " <strong>Sakura</strong> attaque <strong>Ken</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
+    }
     ken.hp = ken.hp - atkResult;
     logs.innerHTML +=  "Ken a " + ken.hp + " HP <br><br>"
 }
