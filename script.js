@@ -59,16 +59,19 @@ function playerFactory(name, profileImg, victoryImg) {
         victoryImg: victoryImg,
 
         attack(target) {// Le personnage attaque
-            atkResult = atk(1,20); // Puissance d'attaque
-            target.hp -= atkResult; // Enleve la puissance atk aux hp adverse
-            currentHealth = this.hp
-            hpBarProgress(currentHealth);
-            if(atkResult === 20){ // Affichage des logs & coups critiques
+            if(this.hp > 0){
+                atkResult = atk(1,20); // Puissance d'attaque
+                target.hp -= atkResult; // Enleve la puissance atk aux hp adverse
+                if(atkResult === 20){ // Affichage des logs & coups critiques
                 logs.innerHTML +=  '<img src="'+profileImg+'" />' + " <strong>"+this.name+"</strong> attaque <strong>"+target.name+"</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats" + " - COUP CRITIQUE" + "<br>";
-            }else{
+                }else{
                 logs.innerHTML +=  '<img src="'+ profileImg+'" />' + " <strong>"+this.name+"</strong> attaque <strong>"+target.name+"</strong> et inflige " + "<span class="+dmgClassName+">"+atkResult+"</span>" + " dégats <br>";
+                }
+                logs.innerHTML +=  target.name + " a " + target.hp + " HP <br><br>"
+            }else{
+                
             }
-            logs.innerHTML +=  target.name + " a " + target.hp + " HP <br><br>"
+            
         },
 
         victory(target){
@@ -100,6 +103,7 @@ var btn = document.getElementsByClassName('button')[0];
 var btnContainer = document.getElementsByClassName('button-container')[0];
 var logs = document.getElementsByClassName('logs')[0];
 var fighters = document.getElementsByClassName('fighters')[0];
+var elem = document.getElementsByClassName("hp-bar-left-progress")[0];
 var img = new Image();
 
 
@@ -122,15 +126,12 @@ function atk(min, max)
 }
 
 // Barres de points de vie
-function hpBarProgress(currentHealth) {
-    var elem = document.getElementsByClassName("hp-bar-left-progress")[0]; 
+function hpBarProgress() {
+    elem.style.width = fighter1.hp +'%';
 
-    elem.style.width = currentHealth +'%';
-
-    if(currentHealth <= 0){
-        console.log("coucou")
-        elem.style.width = '0%'; 
-    } 
+    if(fighter1.hp <= 0){
+        elem.style.width = '0%';
+    }
 }
 
 function combat(){
@@ -150,9 +151,8 @@ function combat(){
     fighter2.hp = 100;
     logs.innerHTML =  "";
 
-    
-
-    var initCombat = pileFace(0,1); // Pile ou face pour savoir qui commence
+    // Pile ou face pour savoir qui commence
+    var initCombat = pileFace(0,1); 
 
     if(initCombat === 0){
         logs.innerHTML +=  "<br>-------------------------<br><br>"
@@ -171,23 +171,25 @@ function combat(){
         if (fighter1.hp > 0 && fighter2 && initCombat === 0){
             fighter1.attack(fighter2);
             fighter2.attack(fighter1);
-            if(fighter1.hp <= 0){
+            hpBarProgress();
+            if(fighter1.hp <= 0 && fighter2.hp > 0){
                 fighter2.victory(fighter1);
                 clearInterval(refreshIntervalId);
             }
     
-            if(fighter2.hp <= 0){
+            if(fighter2.hp <= 0 && fighter1.hp > 0){
                 fighter1.victory(fighter2);
                 clearInterval(refreshIntervalId);
             }
         }else{
             fighter2.attack(fighter1);
+            hpBarProgress();
             fighter1.attack(fighter2);
-            if(fighter1.hp <= 0){
+            if(fighter1.hp <= 0 && fighter2.hp > 0){
                 fighter2.victory(fighter1);
                 clearInterval(refreshIntervalId);
             }
-            if(fighter2.hp <= 0){
+            if(fighter2.hp <= 0 && fighter1.hp > 0){
                 fighter1.victory(fighter2);
                 clearInterval(refreshIntervalId);
             }
