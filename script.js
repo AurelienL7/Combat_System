@@ -10,11 +10,6 @@
  * 
  * Le jeu démarre automatiquement, les combatttants s'attaquent à tour de rôle tant qu'ils sont vivants.
  * Le jeu s'arrête quand un combattant est mort
- * 
- * PISTES D'AMELIORATION 
- * - Ajouter de l'aléatoire
- * - Système de coup critique
- * - Ajout système de défense / atk
  */
 
 
@@ -24,20 +19,14 @@
  * TO DO
  * ---------------------
  * 
- * Afficher les coups critiques
  * Afficher les attaques dans la div fighters
- * Ralentir l'affichage des logs
- * Styliser le texte des logs
  * Bouton reset
  * Dans les logs, afficher l'attaquant à gauche et le défenseur à droite
- * Factoriser le code, prévoir l'ajout de nouveaux personnages
  * Choix du personnage
- * Ajout de personnages
  * Système d'attaque / défense
  * Tour par tour
  * scroll automatique
- * desactiver le bouton fight pendant le combat
- * Ajouter une barre de HP
+ * Animations de combat durant le combat
  */
 
 
@@ -46,9 +35,9 @@
 // OBJETS
 //////////////////
 
-var dmgClassName = "dmg";
 
-function playerFactory(name, profileImg, victoryImg) {
+
+function playerFactory(name, profileImg, victoryImg, atkImg) {
     return {
         name: name,
 
@@ -57,6 +46,8 @@ function playerFactory(name, profileImg, victoryImg) {
         profileImg: profileImg, // l'image du combattant
 
         victoryImg: victoryImg,
+
+        atkImg: atkImg,
 
         attack(target) {// Le personnage attaque
             if(this.hp > 0){
@@ -78,7 +69,7 @@ function playerFactory(name, profileImg, victoryImg) {
             // Affiche l'image de victoire
             fighters.innerHTML = '<img src="'+victoryImg+'" />'; 
             fighters.style = "flex-direction:column-reverse;"; 
-            fighters.innerHTML += "<h1>"+this.name+ " WIN</h1>"
+            classHpBarKo.innerHTML = this.name+ " WIN"
             logs.innerHTML +=  "<br><br>-------------------------<br><br>"
             logs.innerHTML +=  target.name + " est K.O."
             logs.innerHTML +=  "<br><br>-------------------------<br><br>"
@@ -87,8 +78,8 @@ function playerFactory(name, profileImg, victoryImg) {
 }
 
 
-var ken = playerFactory("Ken", "img/ken_profile.png", "img/ken_victory.gif");
-var sakura = playerFactory("Sakura", "img/sakura_profile.png", "img/sakura_victory.gif");
+var ken = playerFactory("Ken", "img/ken_profile.png", "img/ken_victory.gif", "img/ken_atk.gif");
+var sakura = playerFactory("Sakura", "img/sakura_profile.png", "img/sakura_victory.gif", "img/sakura_atk.gif");
 var akuma = playerFactory("Akuma", "img/akuma_profile.png", "img/akuma_victory.gif");
 
 
@@ -103,8 +94,11 @@ var btn = document.getElementsByClassName('button')[0];
 var btnContainer = document.getElementsByClassName('button-container')[0];
 var logs = document.getElementsByClassName('logs')[0];
 var fighters = document.getElementsByClassName('fighters')[0];
-var elem = document.getElementsByClassName("hp-bar-left-progress")[0];
+var classFighter1 = document.getElementsByClassName('fighter1')[0];
+var classFighter2 = document.getElementsByClassName('fighter2')[0];
+var classHpBarKo = document.getElementsByClassName('hp-bar-ko')[0];
 var img = new Image();
+var dmgClassName = "dmg";
 
 
 
@@ -125,11 +119,22 @@ function atk(min, max)
  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Barres de points de vie
-function hpBarProgress() {
+// Bar HP LEFT
+function hpBarProgressLeft() {
+    var elem = document.getElementsByClassName("hp-bar-left-progress")[0];
     elem.style.width = fighter1.hp +'%';
 
     if(fighter1.hp <= 0){
+        elem.style.width = '0%';
+    }
+}
+
+// Bar HP RIGHT
+function hpBarProgressRight() {
+    var elem = document.getElementsByClassName("hp-bar-right-progress")[0];
+    elem.style.width = fighter2.hp +'%';
+
+    if(fighter2.hp <= 0){
         elem.style.width = '0%';
     }
 }
@@ -151,6 +156,10 @@ function combat(){
     fighter2.hp = 100;
     logs.innerHTML =  "";
 
+    // Changement des images de combat
+  /*   classFighter1.innerHTML = '<img src="'+fighter1.atkImg+'" />';
+    classFighter2.innerHTML = '<img src="'+fighter2.atkImg+'" />'; */
+
     // Pile ou face pour savoir qui commence
     var initCombat = pileFace(0,1); 
 
@@ -170,8 +179,9 @@ function combat(){
         
         if (fighter1.hp > 0 && fighter2 && initCombat === 0){
             fighter1.attack(fighter2);
+            hpBarProgressRight();
             fighter2.attack(fighter1);
-            hpBarProgress();
+            hpBarProgressLeft();
             if(fighter1.hp <= 0 && fighter2.hp > 0){
                 fighter2.victory(fighter1);
                 clearInterval(refreshIntervalId);
@@ -183,8 +193,9 @@ function combat(){
             }
         }else{
             fighter2.attack(fighter1);
-            hpBarProgress();
+            hpBarProgressLeft();
             fighter1.attack(fighter2);
+            hpBarProgressRight();
             if(fighter1.hp <= 0 && fighter2.hp > 0){
                 fighter2.victory(fighter1);
                 clearInterval(refreshIntervalId);

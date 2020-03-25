@@ -58,14 +58,6 @@ h1{
 }
 
 
-.hp-bar-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 0 20px;
-}
-
 .name-container{
     display: flex;
     justify-content: space-between;
@@ -81,6 +73,15 @@ h1{
     -webkit-text-stroke-width: 2px; 
     -webkit-text-stroke-color: rgb(5, 9, 236); 
     text-shadow: 2px 2px 7px #0F10CE;
+}
+
+.hp-bar-container{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
 }
 
 .hp-bar-left{
